@@ -1,10 +1,12 @@
 const express = require("express");
 
-const axios = require("axios").default;
+const cors = require("cors");
+
+const axios = require("axios");
 
 const moment = require("moment");
 
-const _ = require('lodash')
+// const _ = require("lodash");
 
 const app = express();
 
@@ -12,49 +14,46 @@ const PORT = 3000;
 
 const HOST = "localhost";
 
-const baseURL = "https://api.covid19api.com";
+const baseURL = "https://covid19.mathdro.id/api";
 
-  app.get("/global", async (req, res) => {
-    const response = await axios.get(`${baseURL}/summary`);
-    const result = response.data.Global
-    res.json(result);
-  });
-
-  app.get("/total/country/:countrySlug", async (req, res) => {
-    const response = await axios.get(`${baseURL}/summary`);
-    const data = response.data.Countries
-    const countries = _.groupBy(data, 'Slug')
-    const country = req.params.countrySlug
-    const result = countries[country]
-    res.json(result);
-  });
-
-  app.get("/fivedays/country/:countrySlug", async (req, res) => {
-    const todayUTC = moment.utc(moment().startOf("day"))
-    const fiveDayAgoUTC = moment.utc(moment().subtract(8, "d").startOf("day"))
-    const response = await axios.get(`${baseURL}/country/${req.params.countrySlug}`, {
-      params: {
-        from: "" + fiveDayAgoUTC,
-        to: "" + todayUTC,
-      }
-    });
-    const data = response.data
-    const countries = _.groupBy(data, "Date")
-    const result = countries
-    res.json(result);
-  });
-
-  // app.get("/total/countries", async (req, res) => {
-  //   const data = await axios.get(`${baseURL}/countries`);
-  //   res.json(data.data);
-  // });
-  // app.get("/total/country", async (req, res) => {
-  //   const data = await axios.get(`${baseURL}/`);
-  //   res.json(data.data);
-  // });
+app.get("/api", cors(), async (req, res) => {
+  const response = await axios.get(`${baseURL}`);
+  const result = response.data;
+  res.json(result);
+});
+app.get("/api/countries/:isoCountry", cors(), async (req, res) => {
+  const response = await axios.get(`${baseURL}/countries/${req.params.isoCountry}`);
+  const result = response.data;
+  res.json(result);
+});
+app.get("/api/daily/yesterday", cors(), async (req, res) => {
+  const yesterday = moment()
+        .subtract(1, "days")
+        .startOf("day")
+        .format("M-D-YYYY");
+  const response = await axios.get(`${baseURL}/daily/${yesterday}`);
+  const result = response.data;
+  res.json(result);
+});
+app.get("/api/daily/beforeYesterday", cors(), async (req, res) => {
+  const beforeYesterday = moment()
+        .subtract(2, "days")
+        .startOf("day")
+        .format("M-D-YYYY");
+  const response = await axios.get(`${baseURL}/daily/${beforeYesterday}`);
+  const result = response.data;
+  res.json(result);
+});
+app.get("/api/daily/tempBeforeYesterday", cors(), async (req, res) => {
+  const tempBeforeYesterday = moment()
+        .subtract(3, "days")
+        .startOf("day")
+        .format("M-D-YYYY");
+  const response = await axios.get(`${baseURL}/daily/${tempBeforeYesterday}`);
+  const result = response.data;
+  res.json(result);
+});
 
 app.listen(PORT, HOST, () => {
   console.log(`Server is listening at ${HOST}:${PORT}`);
 });
-
-
