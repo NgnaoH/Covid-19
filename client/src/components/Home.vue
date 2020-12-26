@@ -124,6 +124,7 @@ export default {
   components: { ModelSelect },
 
   data: () => ({
+    baseEndpoint: "http://localhost:3000/api/NgnaoH",
     data: "",
     todayInCountries: 0,
     countryDeathPercentage: 0,
@@ -139,7 +140,6 @@ export default {
       value: "",
       text: "",
     },
-    baseEndpoint: "http://localhost:3000/api",
     global: {
       confirmed: 0,
       deaths: 0,
@@ -186,12 +186,12 @@ export default {
         data = await axios.get(
           `${this.baseEndpoint}/countries/${this.selectedCountry.value}`
         );
+        setTimeout(() => {
+          this.countryError = true;
+        }, 3000);
       } catch {
-        this.loading = false;
+        this.loading = true;
         this.countryError = true;
-        // setTimeout(() => {
-        //   this.countryError = false;
-        // }, 5000);
       }
       this.countriesUpdate = {
         confirmed: 0,

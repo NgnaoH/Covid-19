@@ -1,34 +1,33 @@
 const express = require("express");
-
 const cors = require("cors");
-
 const axios = require("axios");
-
 const moment = require("moment");
-
+const chalk = require("chalk");
 // const _ = require("lodash");
-
 const app = express();
-
 const PORT = 3000;
-
 const HOST = "localhost";
 
 const baseURL = "https://covid19.mathdro.id/api";
 
-app.get("/api", cors(), async (req, res) => {
+app.get("/api/NgnaoH", cors(), async (req, res) => {
   const response = await axios.get(`${baseURL}`);
   const result = response.data;
   res.json(result);
 });
-app.get("/api/countries/:isoCountry", cors(), async (req, res) => {
-  const response = await axios.get(
-    `${baseURL}/countries/${req.params.isoCountry}`
-  );
-  const result = response.data;
-  res.json(result);
+app.get("/api/NgnaoH/countries/:isoCountry", cors(), async (req, res) => {
+  try {
+    const response = await axios.get(
+      `${baseURL}/countries/${req.params.isoCountry}`
+    );
+    const result = response.data;
+    res.json(result);
+  } catch {
+    
+  }
 });
-app.get("/api/daily/yesterday", cors(), async (req, res) => {
+
+app.get("/api/NgnaoH/daily/yesterday", cors(), async (req, res) => {
   const yesterday = moment()
     .subtract(2, "days")
     .startOf("day")
@@ -37,7 +36,7 @@ app.get("/api/daily/yesterday", cors(), async (req, res) => {
   const result = response.data;
   res.json(result);
 });
-app.get("/api/daily/beforeYesterday", cors(), async (req, res) => {
+app.get("/api/NgnaoH/daily/beforeYesterday", cors(), async (req, res) => {
   const beforeYesterday = moment()
     .subtract(3, "days")
     .startOf("day")
@@ -46,7 +45,7 @@ app.get("/api/daily/beforeYesterday", cors(), async (req, res) => {
   const result = response.data;
   res.json(result);
 });
-app.get("/api/daily/tempBeforeYesterday", cors(), async (req, res) => {
+app.get("/api/NgnaoH/daily/tempBeforeYesterday", cors(), async (req, res) => {
   const tempBeforeYesterday = moment()
     .subtract(4, "days")
     .startOf("day")
@@ -57,5 +56,5 @@ app.get("/api/daily/tempBeforeYesterday", cors(), async (req, res) => {
 });
 
 app.listen(PORT, HOST, () => {
-  console.log(`Server is listening at ${HOST}:${PORT}`);
+  console.log(chalk.green(`Server is listening at ${HOST}:${PORT}`));
 });
