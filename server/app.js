@@ -22,33 +22,35 @@ app.get("/api", cors(), async (req, res) => {
   res.json(result);
 });
 app.get("/api/countries/:isoCountry", cors(), async (req, res) => {
-  const response = await axios.get(`${baseURL}/countries/${req.params.isoCountry}`);
+  const response = await axios.get(
+    `${baseURL}/countries/${req.params.isoCountry}`
+  );
   const result = response.data;
   res.json(result);
 });
 app.get("/api/daily/yesterday", cors(), async (req, res) => {
   const yesterday = moment()
-        .subtract(1, "days")
-        .startOf("day")
-        .format("M-D-YYYY");
+    .subtract(2, "days")
+    .startOf("day")
+    .format("M-D-YYYY");
   const response = await axios.get(`${baseURL}/daily/${yesterday}`);
   const result = response.data;
   res.json(result);
 });
 app.get("/api/daily/beforeYesterday", cors(), async (req, res) => {
   const beforeYesterday = moment()
-        .subtract(2, "days")
-        .startOf("day")
-        .format("M-D-YYYY");
+    .subtract(3, "days")
+    .startOf("day")
+    .format("M-D-YYYY");
   const response = await axios.get(`${baseURL}/daily/${beforeYesterday}`);
   const result = response.data;
   res.json(result);
 });
 app.get("/api/daily/tempBeforeYesterday", cors(), async (req, res) => {
   const tempBeforeYesterday = moment()
-        .subtract(3, "days")
-        .startOf("day")
-        .format("M-D-YYYY");
+    .subtract(4, "days")
+    .startOf("day")
+    .format("M-D-YYYY");
   const response = await axios.get(`${baseURL}/daily/${tempBeforeYesterday}`);
   const result = response.data;
   res.json(result);
